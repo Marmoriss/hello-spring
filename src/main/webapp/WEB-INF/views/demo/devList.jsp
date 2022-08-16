@@ -45,7 +45,7 @@
 		</c:forEach>
 	</tbody>
 </table>
-<form name="deleteFrm" method="POST">
+<form name="deleteDevFrm" method="POST" action="${pageContext.request.contextPath}/demo/deleteDev.do">
 	<input type="hidden" name="no" value=""/>
 </form>
 
@@ -56,7 +56,7 @@
  */
  
 const updateDev = (no) => {
-	 location.href = `${pageContext.request.contextPath}/demo/updateDev.do?no=\${no}`;
+	 location.href = "${pageContext.request.contextPath}/demo/updateDev.do?no=" + no;
 }
 
 /**
@@ -64,13 +64,13 @@ const updateDev = (no) => {
  */
  
  const deleteDev = (no) => {
-	 if(!confirm("정말 삭제하시겠습니까?")) return;
 	 
-	 const frm = document.deleteFrm;
-	 frm.action = `${pageContext.request.contextPath}/demo/deleteDev.do`;
-	 frm.no.value = no;
-	 frm.submit();
- }
+	 if(confirm(no + "번 Dev정보를 정말 삭제하시겠습니까?")){
+		 const frm = document.deleteDevFrm;
+		 frm.no.value = no;
+		 frm.submit();
+	 }
+}
  
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

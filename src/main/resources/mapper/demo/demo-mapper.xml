@@ -2,8 +2,12 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="demo">
-
+<mapper namespace="com.kh.spring.demo.model.dao.DemoDao">
+	
+	<resultMap type="dev" id="devMap">
+		<result column="lang" property="lang" />
+	</resultMap>
+	
 	<insert id="insertDev">
 		insert into
 			dev
@@ -26,10 +30,7 @@
 		order by
 			no
 	</select>
-	
-	<resultMap type="dev" id="devMap">
-		<result column="lang" property="lang" />
-	</resultMap>
+
 	
 	<select id="selectDevByNo" resultMap="devMap">
 		select

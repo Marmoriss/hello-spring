@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kh.spring.todo.model.dao.TodoDao">
+	<resultMap type="todo" id="todoMap">
+	</resultMap>
+
+	<select id="selectTodoList" resultMap="todoMap">
+		select
+			*
+		from
+			todo
+		order by (
+			case when
+				completed_at is null
+			then 1
+			else 2
+			end
+		),
+		completed_at desc,
+		no
+	</select>
+	
+	<update id="updateTodo">
+		update
+			todo
+		set
+			<if test="isCompleted">
+				completed_at = sysdate
+			</if>
+			<if test="!isCompleted">
+				completed_at = null
+			</if>
+		where
+			no = #{no}
+	</update>
+</mapper>

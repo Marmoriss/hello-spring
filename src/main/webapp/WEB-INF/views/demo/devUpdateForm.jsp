@@ -1,3 +1,6 @@
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.List"%>
+<%@page import="com.kh.spring.demo.model.dto.Dev"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -29,7 +32,7 @@ div#demo-container{
 		<div class="form-group row">
 		  <label for="career" class="col-sm-2 col-form-label">개발경력</label>
 		  <div class="col-sm-10">
-		    <input type="number" class="form-control" id="career" name="career" value="${updateDev.career}" required>년
+		    <input type="number" class="form-control" id="career" name="career" value="${updateDev.career}" required>
 		  </div>
 		</div>
 		<div class="form-group row">
@@ -44,37 +47,43 @@ div#demo-container{
 	    	<div class="col-sm-10">
 			    <div class="form-check form-check-inline">
 				  <input class="form-check-input" type="radio" name="gender"
-				  		 id="gender0" value="M" ${updateDev.gender != null && updateDev.gender eq 'M' ? "checked" : ""}>
+				  		 id="gender0" value="M" ${updateDev.gender eq 'M' ? "checked" : ""}>
 				  <label class="form-check-label" for="gender0">남</label>
 				</div>
 				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="radio" name="gender 
-				  		 id="gender1" value="F" ${updateDev.gender != null && updateDev.gender eq 'F' ? "checked" : ""}>
+				  <input class="form-check-input" type="radio" name="gender"
+				  		 id="gender1" value="F" ${updateDev.gender eq 'F' ? "checked" : ""}>
 				  <label class="form-check-label" for="gender1">여</label>
 				</div>
 			</div>
 		</div>
+<%
+	Dev updateDev = (Dev) request.getAttribute("updateDev");
+	String[] lang = updateDev.getLang();
+	List<String> langList = Arrays.asList(lang);
+	pageContext.setAttribute("langList", langList);
+%>
 		<div class="form-group row">
 			<label class="col-sm-2 col-form-label">개발언어</label>
 			<div class="col-sm-10">
 				<div class="form-check form-check-inline">
 				  <input class="form-check-input" type="checkbox" name="lang" id="Java" value="Java"
-				   	${fn:contains(fn:join(updateDev.lang, ', '), "Java") ? 'checked' : ''}>
+				   	${langList.contains("Java") ? 'checked' : ''}>
 				  <label class="form-check-label" for="Java">Java</label>
 				</div>
 				<div class="form-check form-check-inline">
 				  <input class="form-check-input" type="checkbox" name="lang" id="C" value="C"
-				  	${fn:contains(fn:join(updateDev.lang, ', '), "C") ? 'checked' : ''}>
+				  	${langList.contains("C") ? 'checked' : ''}>
 				  <label class="form-check-label" for="C">C</label>
 				</div>
 				<div class="form-check form-check-inline">
 				  <input class="form-check-input" type="checkbox" name="lang" id="Javascript" value="Javascript"
-				  	${fn:contains(fn:join(updateDev.lang, ', '), "Javascript") ? 'checked' : ''}>
+				  	${langList.contains("Javascript") ? 'checked' : ''}>
 				  <label class="form-check-label" for="Javascript">Javascript</label>
 				</div>
 				<div class="form-check form-check-inline">
 				  <input class="form-check-input" type="checkbox" name="lang" id="Python" value="Python"
-				  	${fn:contains(fn:join(updateDev.lang, ', '), "Python") ? 'checked' : ''}>
+				  	${langList.contains("Python") ? 'checked' : ''}>
 				  <label class="form-check-label" for="Python">Python</label>
 				</div>
 			</div>

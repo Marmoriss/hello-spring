@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,7 +59,33 @@ import com.kh.spring.demo.model.service.DemoService;
  * MultipartFile : 업로드파일 처리 인터페이스. CommonsMultipartFile
  * RedirectAttributes : DML처리후 요청주소 변경을 위한 redirect시 속성처리 지원
  *
+ *
+ *
+ *
+ * Model
+ * - mvc의 model이 아닌 view단에 데이터를 전달하기 위한 임시 저장소
+ * - Map 객체
+ * 
+ * - ModelAndView
+ * 		- model -> addObject
+ * 		- view 	-> setView(View) | setViewName(String)
+ * - ModelMap
+ * 		- model -> addAttribute
+ * 		- view 없음. handler에서 view 정보를 문자열로 반환해야함.
+ * - Model
+ * 		- model -> addAttribute
+ * 		- view 없음. handler에서 view 정보를 문자열로 반환해야함.
+ * 
+ * 관련 어노테이션
+ * @ModelAttribute 	  
+ * 		- 메소드 레벨 - 해당 controller의 전역 모델속성 등록
+ * 		- 메소드 매개변수에 작성 - 모델 속성에 대한 getter
+ * @SessionAttribute  -> 메소드 매개변수에 작성. session scope에 저장된 속성에 대한 getter
+ * @SessionAttributes -> 클래스레벨. session scope에 저장된 속성명 관리
+ * 
+ * 
  * </pre>
+ * 
  */
 
 @Controller
@@ -70,6 +97,13 @@ public class DemoController {
 	@Autowired
 	private DemoService demoService;
 	
+	@ModelAttribute("common")
+	public Model common(Model model) {
+		log.debug("@ModelAttribute - common 호출!");
+		model.addAttribute("email", "admin@kh.com");
+		model.addAttribute("tel", "070-1234-1234");
+		return model;
+	}
 	
 	/**
 	 * value : path에 대한 별칭
@@ -169,9 +203,9 @@ public class DemoController {
 	public String updateDev(Dev dev, RedirectAttributes redirectArrt) {
 		int result = demoService.updateDev(dev);
 		log.info("result = {}", result);
-		redirectArrt.addFlashAttribute("msg", "개발자 정보 수정 성공");
+		redirectArrt.addFlashAttribute("msg", "Dev 정보 수정 성공");
 		
-		return "redirect:/";
+		return "redirect:/demo/devList.do";
 	}
 	
 	@RequestMapping(path = "/deleteDev.do", method = RequestMethod.POST)
@@ -179,9 +213,9 @@ public class DemoController {
 		
 		int result = demoService.deleteDev(no);
 		log.info("result = {}", result);
-		redirectArrt.addFlashAttribute("msg", "개발자 정보 삭제 성공");
+		redirectArrt.addFlashAttribute("msg", "Dev 정보 삭제 성공");
 		
-		return "redirect:/";
+		return "redirect:/demo/devList.do";
 	}
 	
 	
