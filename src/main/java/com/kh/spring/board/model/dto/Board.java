@@ -1,8 +1,9 @@
 package com.kh.spring.board.model.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -14,6 +15,7 @@ import lombok.ToString;
 public class Board extends BoardEntity {
 
 	private int attachCount;
+	private List<Attachment> attachments = new ArrayList<>();
 
 	public Board(@NonNull int no, @NonNull String title, String memberId, String content, int readCount,
 			LocalDateTime createdAt, LocalDateTime updatedAt, int attachCount) {
@@ -21,6 +23,9 @@ public class Board extends BoardEntity {
 		this.attachCount = attachCount;
 	}
 	
-	
+	public void add(Attachment attach) {
+		this.attachments.add(attach);
+	}
 	
 }
+ 

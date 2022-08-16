@@ -6,11 +6,17 @@ import java.util.Map;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.spring.board.model.dao.BoardDao;
+import com.kh.spring.board.model.dto.Attachment;
 import com.kh.spring.board.model.dto.Board;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
+@Transactional(rollbackFor = Exception.class)
 public class BoardServiceImpl implements BoardService {
 	
 	@Autowired  
@@ -27,5 +33,44 @@ public class BoardServiceImpl implements BoardService {
 		
 		return boardDao.selectBoardList(rowBounds);
 	}
+	
+	@Override
+	public int getTotalContent() {
+		return boardDao.getTotalContent();
+	}
+	
+	@Override
+	public int insertBoard(Board board) {
+		// insert board
+		int result = boardDao.insertBoard(board);
+		log.debug("board#no = {}", board.getNo());
+		
+		// insert attachment * n
+		List<Attachment> attachments = board.getAttachments();
+		if(!attachments.isEmpty()) {
+			for(Attachment attach : attachments) {
+				attach.setBoardNo(board.getNo());
+				result = boardDao.insertAttachment(attach);
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
