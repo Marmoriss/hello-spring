@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.kh.spring.member.model.dto.Member;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -15,6 +17,7 @@ import lombok.ToString;
 public class Board extends BoardEntity {
 
 	private int attachCount;
+	private Member member;
 	private List<Attachment> attachments = new ArrayList<>();
 
 	public Board(@NonNull int no, @NonNull String title, String memberId, String content, int readCount,

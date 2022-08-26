@@ -20,6 +20,12 @@
 			#{lang},
 			default
 		)
+		<selectKey order="AFTER" resultType="_int" keyProperty="no">
+			select
+				seq_dev_no.currval
+			from
+				dual
+		</selectKey>
 	</insert>
 	
 	<select id="selectDevList" resultMap="devMap">
@@ -50,6 +56,31 @@
 			email = #{email},
 			gender = #{gender},
 			lang = #{lang}
+		where
+			no = #{no}
+	</update>
+	
+	<!-- set 태그는 set 구문 마지막의 , 를 제거해준다. -->
+	<update id="updatePartialDev">
+		update
+			dev
+		<set>
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="career != null and career != 0">
+				career = #{career},
+			</if>			
+			<if test="email != null and email != ''">
+				email = #{email},
+			</if>			
+			<if test="gender != null and gender != ''">
+				gender = #{gender},
+			</if>			
+			<if test="lang != null">
+				lang = #{lang}
+			</if>	
+		</set>		
 		where
 			no = #{no}
 	</update>

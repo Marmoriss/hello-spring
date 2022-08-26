@@ -3,6 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,12 +23,25 @@
 
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" />
-
 <c:if test="${not empty msg}">
 	<script>
 		alert("${msg}");
 	</script>
 </c:if>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<sec:authorize access="isAuthenticated()">
+	<script>
+	const memberId = "<sec:authentication property='principal.username'/>";
+	</script>
+	<script src="${pageContext.request.contextPath}/resources/js/ws.js"></script>
+</sec:authorize>
+
+
+
+
 </head>
 <body>
 <div id="container">
@@ -56,21 +73,48 @@
                         </div>
 				    </li>
 				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/todo/todoList.do">Todo</a></li>
+				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/menu/menu.do">Menu</a></li>
+				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/data/data.do">Data</a></li>
+				    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Websocket
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/ws/ws.do">ws | sockjs</a>
+                            <sec:authorize access="isAuthenticated() && !hasRole('ADMIN')">
+	                            <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chat.do">관리자와 1:1 채팅</a>
+                            </sec:authorize>
+                        </div>
+				    </li>
+				    <sec:authorize access="hasRole('ADMIN')">
+					    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/memberList.do">관리자</a></li>
+					    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/chatList.do">회원 채팅 목록</a></li>
+				    </sec:authorize>
+				    
 			    </ul>
-			    <c:if test="${empty loginMember}">
+			    
+			    <sec:authorize access="isAnonymous()">
 				    <button class="btn btn-outline-success my-2 my-sm-0" type="button"
 				    	onclick="location.href='${pageContext.request.contextPath}/member/memberLogin.do'">로그인</button>
 	                &nbsp;
 	                <button class="btn btn-outline-success my-2 my-sm-0" type="button"
                 	onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do'">회원가입</button>
-			    </c:if>
-			    <c:if test="${not empty loginMember}">
-			    	<span><a href="${pageContext.request.contextPath}/member/memberDetail.do">${loginMember.name}</a>님, 안녕하세요🌼</span>
+			    </sec:authorize>
+				<sec:authorize access="isAuthenticated()">
+			    	<span>
+			    		<a href="${pageContext.request.contextPath}/member/memberDetail.do">
+							<sec:authentication property="principal.username"/>
+							<sec:authentication property="authorities"/>
+						</a>님, 안녕하세요🌼
+					</span>
 			    	&nbsp;
-			    	<button class="btn btn-outline-success my-2 my-sm-0" type="button"
-                	onclick="location.href='${pageContext.request.contextPath}/member/memberLogout.do'">로그아웃</button>
-			    </c:if>
+                	<form action="${pageContext.request.contextPath}/member/memberLogout.do" method="POST">
+				    	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">로그아웃</button>
+				    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                	</form>
+				</sec:authorize>
 			 </div>
 		</nav>
 	</header>
+
 	<section id="content">

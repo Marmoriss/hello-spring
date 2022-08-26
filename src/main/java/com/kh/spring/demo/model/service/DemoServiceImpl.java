@@ -39,7 +39,10 @@ public class DemoServiceImpl implements DemoService {
 		return demoDao.deleteDev(no);
 	}
 	
-	
+	@Override
+	public int updatePartialDev(Dev dev) {
+		return demoDao.updatePartialDev(dev);
+	}
 	
 	
 	

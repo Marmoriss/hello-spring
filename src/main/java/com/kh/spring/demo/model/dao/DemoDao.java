@@ -9,12 +9,14 @@ public interface DemoDao {
 	int insertDev(Dev dev);
 
 	List<Dev> selectDevList();
-
+	
 	Dev selectDevByNo(int no);
 
 	int updateDev(Dev dev);
 
 	int deleteDev(int no);
+
+	int updatePartialDev(Dev dev);
 
 	
 	

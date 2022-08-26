@@ -50,22 +50,56 @@ public class BoardServiceImpl implements BoardService {
 		if(!attachments.isEmpty()) {
 			for(Attachment attach : attachments) {
 				attach.setBoardNo(board.getNo());
-				result = boardDao.insertAttachment(attach);
+				result = insertAttachment(attach);
 			}
 		}
 		
 		return result;
 	}
 	
+	@Override
+	public int insertAttachment(Attachment attach) {
+		return boardDao.insertAttachment(attach);
+	}
 	
+	@Override
+	public Board selectOneBoard(int no) {
+//		// Board 조회
+//		Board board = boardDao.selectOneBoard(no);
+//		
+//		// List<Attachment> 조회
+//		List<Attachment> attachments = boardDao.selectAttachmentListByBoardNo(no);
+//		board.setAttachments(attachments);
+//		return board;
+		
+		return boardDao.selectOneBoardCollection(no);
+	}
 	
+	@Override
+	public Attachment selectOneAttachment(int no) {
+		return boardDao.selectOneAttachment(no);
+	}
 	
+	@Override
+	public int deleteAttachment(int attachNo) {
+		return boardDao.deleteAttachment(attachNo);
+	}
 	
-	
-	
-	
-	
-	
+	@Override
+	public int updateBoard(Board board) {
+		// update board
+		int result = boardDao.updateBoard(board);
+		
+		// insert attachment
+		List<Attachment> attachments = board.getAttachments();
+		if(attachments != null && !attachments.isEmpty()) {
+			for(Attachment attach : attachments) {
+				result = boardDao.insertAttachment(attach);
+			}
+		}
+		
+		return result;
+	}
 	
 	
 	
