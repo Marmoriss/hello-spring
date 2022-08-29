@@ -12,7 +12,7 @@ import com.kh.spring.chat.model.dto.ChatMember;
 import lombok.NonNull;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ChatServiceImpl implements ChatService {
 
 	@Autowired
@@ -29,7 +29,7 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public void insertChatMembers(List<ChatMember> chatMembers) {
 		for(ChatMember chatMember : chatMembers) {
-			chatDao.insertChatMember(chatMember);
+			int result = chatDao.insertChatMember(chatMember);
 		}
 		
 	}

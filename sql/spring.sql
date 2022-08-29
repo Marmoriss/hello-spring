@@ -290,8 +290,25 @@ create sequence seq_menu_id;
 	select * from menu;
 
 
+-- 관리자와 1:1 채팅
+create table chat_member(
+    chatroom_id varchar2(50),
+    member_id varchar2(50),
+    last_check number default 0,
+    created_at date default sysdate,
+    deleted_at date,
+    constraint pk_chat_member primary key(chatroom_id, member_id), -- 복합 PK
+    constraint fk_chat_member_id foreign key(member_id) references member(member_id)
+);
 
+create table chat_log(
+    no number,
+    chatroom_id varchar2(50),
+    member_id varchar2(50),
+    msg varchar2(4000),
+    time number,
+    constraint pk_chat_log primary key(no),
+    constraint fk_chat_log foreign key(chatroom_id, member_id) references chat_member(chatroom_id, member_id)
+);
 
-
-
-
+select * from chat_member;

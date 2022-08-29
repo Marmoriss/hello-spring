@@ -12,11 +12,11 @@ public interface ChatDao {
 	@Select("select * from chat_member where member_id = #{memberId}")
 	ChatMember findChatMemberByMemberId(@NonNull String memberId);
 
-	@Insert("insert into chat_member values(#{chatroomId}, #{memberId}, default, default, null)")
-	void insertChatMember(ChatMember chatMember);
+	@Insert("insert into chat_member values(#{chatroomId}, #{memberId}, default, default, default)")
+	int insertChatMember(ChatMember chatMember);
 
 	
-	
+
 	
 	
 	
