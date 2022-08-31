@@ -312,3 +312,23 @@ create table chat_log(
 );
 
 select * from chat_member;
+select * from member;
+
+ -- 관리자 채팅목록조회
+ -- 채팅방 별로 최근 한건을 조회해 목록화한다.
+ select 
+    no, 
+    chatroom_id,
+    (select member_id from chat_member where chatroom_id = cl.chatroom_id and member_id != 'admin') member_id, -- 채팅방에 관리자가 아닌 회원아이디
+    msg,
+    time
+ from(
+     select 
+        cl.*,
+        row_number() over(partition by chatroom_id order by no desc) rnum
+     from
+        chat_log cl) cl
+where
+    rnum = 1
+order by
+    time desc;

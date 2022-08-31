@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.kh.spring.chat.model.dto.ChatLog;
 import com.kh.spring.chat.model.dto.ChatMember;
 import com.kh.spring.chat.model.service.ChatService;
 import com.kh.spring.member.model.dto.Member;
@@ -56,7 +57,9 @@ public class ChatController {
 		} else {
 			// 재입장한 경우
 			chatroomId =  chatMember.getChatroomId();
-			
+			List<ChatLog> chatLogs = chatService.findChatLogByChatroomId(chatroomId);
+			log.debug("chatLogs = {}", chatLogs);
+			model.addAttribute("chatLogs", chatLogs);
 		}
 		
 		model.addAttribute("chatroomId", chatroomId);

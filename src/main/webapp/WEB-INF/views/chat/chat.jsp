@@ -1,3 +1,5 @@
+<%@page import="java.util.Date"%>
+<%@page import="com.kh.spring.chat.model.dto.ChatLog"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -15,5 +17,55 @@
     <button id="sendBtn" class="btn btn-outline-secondary" type="button">Send</button>
   </div>
 </div>
+<div>
+    <ul class="list-group list-group-flush" id="data">
+    	<c:if test="${not empty chatLogs}" >
+    		<c:forEach items="${chatLogs}" var="chat">
+    			<%
+    				ChatLog chat = (ChatLog) pageContext.getAttribute("chat");
+    				String time = new Date(chat.getTime()).toString();
+    			%>
+    			<li class="list-group-item" title="<%= time %>">${chat.memberId} : ${chat.msg}</li>
+    		</c:forEach>
+    	</c:if>
+    </ul>
+</div>
+<script>
+// 보내기
+document.querySelector("#sendBtn").addEventListener('click', (e) => {
+	const msg = document.querySelector("#msg").value;
+	if(!msg) return;
+	
+	const payload = {
+			chatroomId : '${chatroomId}',
+			memberId : '<sec:authentication property="principal.username"/>',
+			msg,
+			time : Date.now()
+	};
+	
+	stompClient.send(`/app/chat/${chatroomId}`, {}, JSON.stringify(payload));
+	
+	document.querySelector("#msg").value = "";
+	
+});
+
+// 받기
+setTimeout(() => {
+	stompClient.subscribe(`/app/chat/${chatroomId}`, (message) => {
+		const {'content-type' : contentType} = message.headers;
+		if(!contentType) return;
+		
+		console.log(`/app/chat/${chatroomId} : `, message);
+		const {memberId, msg, time} = JSON.parse(message.body);
+		const html = `
+			<li class="list-group-item" title="\${new Date(time).toLocaleString()}">\${memberId} : \${msg}</li>
+		`;
+		const wrapper = document.querySelector("#data");
+		wrapper.insertAdjacentHTML('beforeend', html);
+	});
+	
+}, 500);
+
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -39,9 +39,6 @@
 	<script src="${pageContext.request.contextPath}/resources/js/ws.js"></script>
 </sec:authorize>
 
-
-
-
 </head>
 <body>
 <div id="container">

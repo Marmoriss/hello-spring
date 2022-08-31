@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.spring.chat.model.dao.ChatDao;
+import com.kh.spring.chat.model.dto.ChatLog;
 import com.kh.spring.chat.model.dto.ChatMember;
 
 import lombok.NonNull;
@@ -34,7 +35,20 @@ public class ChatServiceImpl implements ChatService {
 		
 	}
 	
+	@Override
+	public int insertChatLog(ChatLog chatLog) {
+		return chatDao.insertChatLog(chatLog);
+	}
 	
+	@Override
+	public List<ChatLog> findChatLogByChatroomId(String chatroomId) {
+		return chatDao.findChatLogByChatroomId(chatroomId);
+	}
+	
+	@Override
+	public List<ChatLog> findRecentChatLogs() {
+		return chatDao.findRecentChatLogs();
+	}
 	
 	
 	

@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.kh.spring.chat.model.dto.ChatLog;
+import com.kh.spring.chat.model.service.ChatService;
 import com.kh.spring.notice.model.service.NoticeService;
 import com.kh.spring.ws.payload.Payload;
 
@@ -18,6 +20,9 @@ public class StompController {
 
 	@Autowired
 	NoticeService noticeService;
+	
+	@Autowired
+	ChatService chatService;
 	
 	/**
 	 * @MessageMapping
@@ -53,8 +58,14 @@ public class StompController {
 		return payload;
 	}
 	
-	
-	
+	@MessageMapping("/chat/{chatroomId}")
+	@SendTo({"/app/chat/{chatroomId}", "/app/admin/chatList"})
+	public ChatLog chatLog(@RequestBody ChatLog chatLog) {
+		log.debug("chatLog = {}", chatLog);
+		int result = chatService.insertChatLog(chatLog);
+		
+		return chatLog;
+	}
 	
 	
 	
