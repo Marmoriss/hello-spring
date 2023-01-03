@@ -178,10 +178,9 @@ div.result {
 			</div>
 			<br />
 			<div class="form-check form-check-inline">
-				<input type="radio" class="form-check-input" name="taste"
-					id="get-hot" value="hot"> <label for="get-hot"
-					class="form-check-label">매운맛</label>&nbsp; <input type="radio"
-					class="form-check-input" name="taste" id="get-mild" value="mild">
+				<input type="radio" class="form-check-input" name="taste" id="get-hot" value="hot"> 
+					<label for="get-hot" class="form-check-label">매운맛</label>&nbsp; 
+					<input type="radio" class="form-check-input" name="taste" id="get-mild" value="mild">
 				<label for="get-mild" class="form-check-label">순한맛</label>
 			</div>
 			<br /> <input type="submit"

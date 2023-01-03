@@ -148,7 +148,7 @@
 			<version>1.2</version>
 		</dependency>
 		
-		<!-- #5. lombok -->
+		<!-- #5. lombok : boilerplate 대신 작성 -->
 	    <dependency>
 	       <groupId>org.projectlombok</groupId>
 	       <artifactId>lombok</artifactId>
